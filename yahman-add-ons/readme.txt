@@ -3,7 +3,7 @@ Contributors: back2nature
 Donate link: https://dev.back2nature.jp/en/donations/
 Tags: popular posts,table of contents,pageviews,twitter timeline
 Requires at least: 4.9.8
-Tested up to: 6.6
+Tested up to: 6.8
 Stable tag: 0.9.30
 Requires PHP: 5.4
 License: GNU General Public License v3 or later
