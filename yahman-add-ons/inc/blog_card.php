@@ -355,9 +355,15 @@ function yahman_addons_blog_card_external($match_url,$bc,$external_data,$cache_n
 		$dir = $upload_dir['basedir'].'/yahman_addons_cache/';
         //$dir = WP_CONTENT_DIR.'/uploads/yahman_addons_cache/';
 		if ( !$wp_filesystem->is_dir($dir) ) {
-			$wp_filesystem->mkdir($dir, 0777);
-			$wp_filesystem->chmod($dir, 0777);
+			$wp_filesystem->mkdir($dir, 0755);
+			$wp_filesystem->chmod($dir, 0755);
 		}
+
+		
+		if ( ! $wp_filesystem->exists( $dir . 'index.php' ) ) {
+			$wp_filesystem->put_contents( $dir . 'index.php', '<?php // Silence is golden.', FS_CHMOD_FILE );
+		}
+
 		$host_url = parse_url(esc_url($match_url), PHP_URL_HOST);
 
         //$favicon_image = $wp_filesystem->get_contents('https://www.google.com/s2/favicons?domain='.$host_url);
@@ -415,24 +421,44 @@ function yahman_addons_blog_card_external($match_url,$bc,$external_data,$cache_n
 
 			if ( ! is_wp_error( $file_image ) && $file_image['response']['code'] === 200 ) {
 
+				$is_valid_ext = false;
 				
-				if( !in_array(strtolower($extension), array('jpg','png','gif','jpeg','svg','webp'), true)){
-					preg_match('/jpe?g|png|gif|svg|webp/', $tags['og:image'], $matches);
+				$allowed_exts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
+
+				
+				if( in_array(strtolower($extension), $allowed_exts, true) ){
+					$is_valid_ext = true;
+				} else {
+					preg_match('/jpe?g|png|gif|webp/i', $tags['og:image'], $matches);
 					if(isset($matches[0])){
-						$extension = $matches[0];
+						$extension = strtolower($matches[0]);
 						$cache_image = $dir.$path_parts['filename'].'.'.$extension;
+						$is_valid_ext = true;
 					}
 				}
 
-				$file_image = $file_image['body'];
+				
+				if ( $is_valid_ext ) {
+					$file_image_body = $file_image['body'];
+					$wp_filesystem->put_contents($cache_image, $file_image_body, FS_CHMOD_FILE);
 
-				$wp_filesystem->put_contents($cache_image, $file_image, FS_CHMOD_FILE);
-				$cache_image_edit = wp_get_image_editor($cache_image);
-				if ( !is_wp_error($cache_image_edit) ) {
-					$cache_image_edit->resize('600', '600');
-					$cache_image_edit->save( $cache_image );
+					$cache_image_edit = wp_get_image_editor($cache_image);
+
+					
+					if ( is_wp_error($cache_image_edit) ) {
+						$wp_filesystem->delete($cache_image);
+						$cache_image = '';
+					} else {
+						
+						$cache_image_edit->resize('600', '600');
+						$cache_image_edit->save( $cache_image );
+						$cache_image = str_replace(WP_CONTENT_DIR, content_url(), $cache_image);
+					}
+				} else {
+					
+					$cache_image = '';
 				}
-				$cache_image = str_replace(WP_CONTENT_DIR, content_url(), $cache_image);
+
 			}else{
 				$cache_image = '';
 			}

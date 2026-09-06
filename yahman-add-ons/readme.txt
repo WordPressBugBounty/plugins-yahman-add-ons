@@ -3,8 +3,8 @@ Contributors: back2nature
 Donate link: https://dev.back2nature.jp/en/donations/
 Tags: popular posts,table of contents,pageviews,twitter timeline
 Requires at least: 4.9.8
-Tested up to: 6.8
-Stable tag: 0.9.30
+Tested up to: 7.1
+Stable tag: 0.9.31
 Requires PHP: 5.4
 License: GNU General Public License v3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -29,6 +29,11 @@ not yet.
 
 
 == Changelog ==
+
+= 0.9.31 =
+* Released: September 6, 2026
+* fixed: Blog card.
+* Special thanks to Artus KG for the report.
 
 = 0.9.30 =
 * Released: July 11, 2024

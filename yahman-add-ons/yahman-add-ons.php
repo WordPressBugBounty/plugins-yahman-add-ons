@@ -3,7 +3,7 @@
 Plugin Name: YAHMAN Add-ons
 Plugin URI: https://dev.back2nature.jp/en/yahman-add-ons/
 Description: YAHMAN Add-ons has Multiple functions.Page views,Google Adsense,Analytics,Social,Profile,Table of contents,Related Posts,sitemap,SEO,JSON-LD structured data,Open Graph protocol(OGP),Blog card,Twitter timeline,Facebook timeline,Carousel Slider etc...
-Version: 0.9.30
+Version: 0.9.31
 Author: YAHMAN
 Author URI: https://back2nature.jp/
 License: GNU General Public License v3 or later
